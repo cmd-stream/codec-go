@@ -5,10 +5,10 @@ package codec
 import (
 	"reflect"
 
-	"github.com/cmd-stream/transport-go"
+	tspt "github.com/cmd-stream/cmd-stream-go/transport"
 	com "github.com/mus-format/common-go"
-	"github.com/mus-format/dts-stream-go"
 	"github.com/mus-format/mus-stream-go/ord"
+	"github.com/mus-format/mus-stream-go/typed"
 )
 
 // NewCodec constructs a Codec with default value decoder logic.
@@ -68,14 +68,14 @@ type Codec[T, V any] struct {
 
 // Encode writes a value of type T to the given transport.Writer.
 // Returns the total number of bytes written and any error.
-func (c Codec[T, V]) Encode(t T, w transport.Writer) (n int, err error) {
+func (c Codec[T, V]) Encode(t T, w tspt.Writer) (n int, err error) {
 	tp := reflect.TypeOf(t)
 	dtm, pst := c.typeMap[tp]
 	if !pst {
 		err = NewUnrecognizedType(tp)
 		return
 	}
-	n, err = dts.DTMSer.Marshal(dtm, w)
+	n, err = typed.DTMSer.Marshal(dtm, w)
 	if err != nil {
 		err = NewFailedToMarshalDTM(err)
 		return
@@ -95,8 +95,8 @@ func (c Codec[T, V]) Encode(t T, w transport.Writer) (n int, err error) {
 
 // Decode reads a value of type V from the given transport.Reader.
 // Returns the decoded value, total bytes read, and any error.
-func (c Codec[T, V]) Decode(r transport.Reader) (v V, n int, err error) {
-	dtm, n, err := dts.DTMSer.Unmarshal(r)
+func (c Codec[T, V]) Decode(r tspt.Reader) (v V, n int, err error) {
+	dtm, n, err := typed.DTMSer.Unmarshal(r)
 	if err != nil {
 		err = NewFailedToUnmarshalDTM(err)
 		return
