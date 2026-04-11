@@ -6,9 +6,9 @@ import (
 	"testing"
 
 	tmock "github.com/cmd-stream/cmd-stream-go/test/mock/transport"
-	"github.com/cmd-stream/codec-generic-go"
-	test "github.com/cmd-stream/codec-generic-go/test"
-	"github.com/cmd-stream/codec-generic-go/test/mock"
+	"github.com/cmd-stream/codec-go"
+	test "github.com/cmd-stream/codec-go/test"
+	"github.com/cmd-stream/codec-go/test/mock"
 	com "github.com/mus-format/common-go"
 	assertfatal "github.com/ymz-ncnk/assert/fatal"
 )
