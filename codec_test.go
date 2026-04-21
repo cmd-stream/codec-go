@@ -22,18 +22,18 @@ func TestCodec(t *testing.T) {
 			wantN   = 1 + 1 + wantLen
 		)
 
-		ser := mock.NewSerializer[test.MyInterface, test.MyInterface]().RegisterMarshal(
-			func(t test.MyInterface) ([]byte, error) {
+		ser := mock.NewSerializer[test.Interface, test.Interface]().RegisterMarshal(
+			func(t test.Interface) ([]byte, error) {
 				return wantBs, nil
 			})
 		c := codec.NewCodec(
 			[]reflect.Type{
-				reflect.TypeFor[test.MyStruct1](),
-				reflect.TypeFor[test.MyStruct2](),
+				reflect.TypeFor[test.Struct1](),
+				reflect.TypeFor[test.Struct2](),
 			},
 			[]reflect.Type{
-				reflect.TypeFor[test.MyStruct1](),
-				reflect.TypeFor[test.MyStruct2](),
+				reflect.TypeFor[test.Struct1](),
+				reflect.TypeFor[test.Struct2](),
 			},
 			ser,
 		)
@@ -49,20 +49,20 @@ func TestCodec(t *testing.T) {
 			return len(p), nil
 		})
 
-		n, err := c.Encode(test.MyStruct1{}, w)
+		n, err := c.Encode(test.Struct1{}, w)
 		assertfatal.EqualError(t, err, nil)
 		assertfatal.Equal(t, n, wantN)
 	})
 
 	t.Run("Failed to marshal DTM", func(t *testing.T) {
-		c := codec.NewCodec[test.MyInterface, test.MyInterface](
+		c := codec.NewCodec[test.Interface, test.Interface](
 			[]reflect.Type{
-				reflect.TypeFor[test.MyStruct1](),
-				reflect.TypeFor[test.MyStruct2](),
+				reflect.TypeFor[test.Struct1](),
+				reflect.TypeFor[test.Struct2](),
 			},
 			[]reflect.Type{
-				reflect.TypeFor[test.MyStruct1](),
-				reflect.TypeFor[test.MyStruct2](),
+				reflect.TypeFor[test.Struct1](),
+				reflect.TypeFor[test.Struct2](),
 			},
 			nil,
 		)
@@ -73,20 +73,20 @@ func TestCodec(t *testing.T) {
 		w := tmock.NewWriter().RegisterWriteByte(func(b byte) error {
 			return writeErr
 		})
-		n, err := c.Encode(test.MyStruct1{}, w)
+		n, err := c.Encode(test.Struct1{}, w)
 		assertfatal.EqualError(t, err, wantErr)
 		assertfatal.Equal(t, n, 0)
 	})
 
 	t.Run("Decoding should work", func(t *testing.T) {
 		wantDTM := 1
-		wantV := test.MyStruct2{Y: "hello"}
+		wantV := test.Struct2{Y: "hello"}
 		wantBs := []byte{1, 2, 3}
 		wantLen := len(wantBs)
 		wantN := 1 + 1 + wantLen
 
-		ser := mock.NewSerializer[test.MyInterface, test.MyInterface]().RegisterUnmarshal(
-			func(bs []byte, v test.MyInterface) error {
+		ser := mock.NewSerializer[test.Interface, test.Interface]().RegisterUnmarshal(
+			func(bs []byte, v test.Interface) error {
 				assertfatal.EqualDeep(t, bs, wantBs)
 
 				rv := reflect.ValueOf(v)
@@ -99,12 +99,12 @@ func TestCodec(t *testing.T) {
 		)
 		c := codec.NewCodec(
 			[]reflect.Type{
-				reflect.TypeFor[test.MyStruct1](),
-				reflect.TypeFor[test.MyStruct2](),
+				reflect.TypeFor[test.Struct1](),
+				reflect.TypeFor[test.Struct2](),
 			},
 			[]reflect.Type{
-				reflect.TypeFor[test.MyStruct1](),
-				reflect.TypeFor[test.MyStruct2](),
+				reflect.TypeFor[test.Struct1](),
+				reflect.TypeFor[test.Struct2](),
 			},
 			ser,
 		)
@@ -125,19 +125,19 @@ func TestCodec(t *testing.T) {
 	})
 
 	t.Run("Unrecognized type", func(t *testing.T) {
-		c := codec.NewCodec[test.MyInterface, test.MyInterface](
+		c := codec.NewCodec[test.Interface, test.Interface](
 			[]reflect.Type{
-				reflect.TypeFor[test.MyStruct1](),
-				reflect.TypeFor[test.MyStruct2](),
+				reflect.TypeFor[test.Struct1](),
+				reflect.TypeFor[test.Struct2](),
 			},
 			[]reflect.Type{
-				reflect.TypeFor[test.MyStruct1](),
-				reflect.TypeFor[test.MyStruct2](),
+				reflect.TypeFor[test.Struct1](),
+				reflect.TypeFor[test.Struct2](),
 			},
 			nil,
 		)
 
-		v := test.MyStruct3{Z: 3.14}
+		v := test.Struct3{Z: 3.14}
 		wantType := reflect.TypeOf(v)
 		wantErr := codec.NewUnrecognizedType(wantType)
 
@@ -149,19 +149,19 @@ func TestCodec(t *testing.T) {
 	})
 
 	t.Run("Failed to marshal byte slice", func(t *testing.T) {
-		ser := mock.NewSerializer[test.MyInterface, test.MyInterface]().RegisterMarshal(
-			func(t test.MyInterface) ([]byte, error) {
+		ser := mock.NewSerializer[test.Interface, test.Interface]().RegisterMarshal(
+			func(t test.Interface) ([]byte, error) {
 				return []byte{}, nil
 			},
 		)
 		c := codec.NewCodec(
 			[]reflect.Type{
-				reflect.TypeFor[test.MyStruct1](),
-				reflect.TypeFor[test.MyStruct2](),
+				reflect.TypeFor[test.Struct1](),
+				reflect.TypeFor[test.Struct2](),
 			},
 			[]reflect.Type{
-				reflect.TypeFor[test.MyStruct1](),
-				reflect.TypeFor[test.MyStruct2](),
+				reflect.TypeFor[test.Struct1](),
+				reflect.TypeFor[test.Struct2](),
 			},
 			ser,
 		)
@@ -175,20 +175,20 @@ func TestCodec(t *testing.T) {
 			return writeErr
 		})
 
-		n, err := c.Encode(test.MyStruct1{}, w)
+		n, err := c.Encode(test.Struct1{}, w)
 		assertfatal.EqualError(t, err, wantErr)
 		assertfatal.Equal(t, n, 1)
 	})
 
 	t.Run("Failed to unmarshal DTM", func(t *testing.T) {
-		c := codec.NewCodec[test.MyInterface, test.MyInterface](
+		c := codec.NewCodec[test.Interface, test.Interface](
 			[]reflect.Type{
-				reflect.TypeFor[test.MyStruct1](),
-				reflect.TypeFor[test.MyStruct2](),
+				reflect.TypeFor[test.Struct1](),
+				reflect.TypeFor[test.Struct2](),
 			},
 			[]reflect.Type{
-				reflect.TypeFor[test.MyStruct1](),
-				reflect.TypeFor[test.MyStruct2](),
+				reflect.TypeFor[test.Struct1](),
+				reflect.TypeFor[test.Struct2](),
 			},
 			nil,
 		)
@@ -206,14 +206,14 @@ func TestCodec(t *testing.T) {
 	})
 
 	t.Run("Unrecognized DTM", func(t *testing.T) {
-		c := codec.NewCodec[test.MyInterface, test.MyInterface](
+		c := codec.NewCodec[test.Interface, test.Interface](
 			[]reflect.Type{
-				reflect.TypeFor[test.MyStruct1](),
-				reflect.TypeFor[test.MyStruct2](),
+				reflect.TypeFor[test.Struct1](),
+				reflect.TypeFor[test.Struct2](),
 			},
 			[]reflect.Type{
-				reflect.TypeFor[test.MyStruct1](),
-				reflect.TypeFor[test.MyStruct2](),
+				reflect.TypeFor[test.Struct1](),
+				reflect.TypeFor[test.Struct2](),
 			},
 			nil,
 		)
@@ -231,14 +231,14 @@ func TestCodec(t *testing.T) {
 	})
 
 	t.Run("Failed to unmarshal byte slice", func(t *testing.T) {
-		c := codec.NewCodec[test.MyInterface, test.MyInterface](
+		c := codec.NewCodec[test.Interface, test.Interface](
 			[]reflect.Type{
-				reflect.TypeFor[test.MyStruct1](),
-				reflect.TypeFor[test.MyStruct2](),
+				reflect.TypeFor[test.Struct1](),
+				reflect.TypeFor[test.Struct2](),
 			},
 			[]reflect.Type{
-				reflect.TypeFor[test.MyStruct1](),
-				reflect.TypeFor[test.MyStruct2](),
+				reflect.TypeFor[test.Struct1](),
+				reflect.TypeFor[test.Struct2](),
 			},
 			nil,
 		)
