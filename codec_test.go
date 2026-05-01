@@ -5,7 +5,7 @@ import (
 	"reflect"
 	"testing"
 
-	tmock "github.com/cmd-stream/cmd-stream-go/test/mock/transport"
+	cmock "github.com/cmd-stream/cmd-stream-go/test/mock"
 	"github.com/cmd-stream/codec-go"
 	test "github.com/cmd-stream/codec-go/test"
 	"github.com/cmd-stream/codec-go/test/mock"
@@ -38,7 +38,7 @@ func TestCodec(t *testing.T) {
 			ser,
 		)
 
-		w := tmock.NewWriter().RegisterWriteByte(func(b byte) error {
+		w := cmock.NewWriter().RegisterWriteByte(func(b byte) error {
 			assertfatal.Equal(t, b, byte(wantDTM))
 			return nil
 		}).RegisterWriteByte(func(b byte) error {
@@ -70,7 +70,7 @@ func TestCodec(t *testing.T) {
 		writeErr := errors.New("failed to write DTM")
 		wantErr := codec.NewFailedToMarshalDTM(writeErr)
 
-		w := tmock.NewWriter().RegisterWriteByte(func(b byte) error {
+		w := cmock.NewWriter().RegisterWriteByte(func(b byte) error {
 			return writeErr
 		})
 		n, err := c.Encode(test.Struct1{}, w)
@@ -109,7 +109,7 @@ func TestCodec(t *testing.T) {
 			ser,
 		)
 
-		r := tmock.NewReader().RegisterReadByte(func() (b byte, err error) {
+		r := cmock.NewReader().RegisterReadByte(func() (b byte, err error) {
 			return byte(wantDTM), nil
 		}).RegisterReadByte(func() (b byte, err error) {
 			return byte(wantLen), nil
@@ -141,7 +141,7 @@ func TestCodec(t *testing.T) {
 		wantType := reflect.TypeOf(v)
 		wantErr := codec.NewUnrecognizedType(wantType)
 
-		w := tmock.NewWriter()
+		w := cmock.NewWriter()
 
 		n, err := c.Encode(v, w)
 		assertfatal.EqualError(t, err, wantErr)
@@ -169,7 +169,7 @@ func TestCodec(t *testing.T) {
 		writeErr := errors.New("failed to write byte slice length")
 		wantErr := codec.NewFailedToMarshalByteSlice(writeErr)
 
-		w := tmock.NewWriter().RegisterWriteByte(func(b byte) error {
+		w := cmock.NewWriter().RegisterWriteByte(func(b byte) error {
 			return nil
 		}).RegisterWriteByte(func(b byte) error {
 			return writeErr
@@ -196,7 +196,7 @@ func TestCodec(t *testing.T) {
 		readErr := errors.New("failed to read DTM")
 		wantErr := codec.NewFailedToUnmarshalDTM(readErr)
 
-		r := tmock.NewReader().RegisterReadByte(func() (b byte, err error) {
+		r := cmock.NewReader().RegisterReadByte(func() (b byte, err error) {
 			return 0, readErr
 		})
 
@@ -221,7 +221,7 @@ func TestCodec(t *testing.T) {
 		const unrecognizedDTM com.DTM = 99
 		wantErr := codec.NewUnrecognizedDTM(unrecognizedDTM)
 
-		r := tmock.NewReader().RegisterReadByte(func() (b byte, err error) {
+		r := cmock.NewReader().RegisterReadByte(func() (b byte, err error) {
 			return byte(unrecognizedDTM), nil
 		})
 
@@ -246,7 +246,7 @@ func TestCodec(t *testing.T) {
 		readErr := errors.New("failed to read byte slice")
 		wantErr := codec.NewFailedToUnmarshalByteSlice(readErr)
 
-		r := tmock.NewReader().RegisterReadByte(func() (b byte, err error) {
+		r := cmock.NewReader().RegisterReadByte(func() (b byte, err error) {
 			return 0, nil
 		}).RegisterReadByte(func() (b byte, err error) {
 			return 0, readErr
