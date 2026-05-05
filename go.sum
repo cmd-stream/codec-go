@@ -1,5 +1,5 @@
-github.com/cmd-stream/cmd-stream-go v0.6.2 h1:x5/OWyoVe53wOspwuzYiORllVn5Fax1DdV+5lx57fao=
-github.com/cmd-stream/cmd-stream-go v0.6.2/go.mod h1:WVyluELMZ7d8lWxIYcSHlDcb3Rs2IsZdcP7EsoVNUBk=
+github.com/cmd-stream/cmd-stream-go v0.7.1 h1:GrY1x3612LvdByyn1NQooV2JZB1RNSbebM2Uniikeeg=
+github.com/cmd-stream/cmd-stream-go v0.7.1/go.mod h1:WVyluELMZ7d8lWxIYcSHlDcb3Rs2IsZdcP7EsoVNUBk=
 github.com/mus-format/common-go v0.0.0-20260324174526-3d8f1741b5a2 h1:oob6maWbVV+yevC1EawGOSyqcU2Cvj3ZWAF0FKoT+uU=
 github.com/mus-format/common-go v0.0.0-20260324174526-3d8f1741b5a2/go.mod h1:XhSTID+Ln32bHgJQjtizWsMFY219tfWa4sObJxHhATw=
 github.com/mus-format/mus-stream-go v0.10.1 h1:cxoNzO5zwEvFimD1XgXAkEhCe7P3zjomi/389zzV2t4=

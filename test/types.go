@@ -3,7 +3,6 @@ package test
 import (
 	"context"
 	"fmt"
-	"time"
 
 	"github.com/cmd-stream/cmd-stream-go/core"
 )
@@ -38,18 +37,14 @@ func (s Struct3) Print() {
 
 type Cmd1 struct{ A, B int }
 
-func (c Cmd1) Exec(ctx context.Context, seq core.Seq, at time.Time,
-	_ struct{}, proxy core.Proxy,
-) (err error) {
-	return
+func (c Cmd1) Exec(ctx context.Context, _ struct{}, proxy core.Proxy) error {
+	return nil
 }
 
 type Cmd2 struct{ A, B int }
 
-func (c Cmd2) Exec(ctx context.Context, seq core.Seq, at time.Time,
-	_ struct{}, proxy core.Proxy,
-) (err error) {
-	return
+func (c Cmd2) Exec(ctx context.Context, _ struct{}, proxy core.Proxy) error {
+	return nil
 }
 
 type Result1 int
