@@ -256,4 +256,26 @@ func TestCodec(t *testing.T) {
 		assertfatal.EqualError(t, err, wantErr)
 		assertfatal.Equal(t, n, 1)
 	})
+
+	t.Run("Byte slice length validation should work", func(t *testing.T) {
+		var (
+			maxLen  = 5
+			longLen = 10
+			c       = codec.NewCodec[test.Interface, test.Interface](
+				[]reflect.Type{reflect.TypeFor[test.Struct1]()},
+				[]reflect.Type{reflect.TypeFor[test.Struct1]()},
+				nil,
+				codec.WithMaxLen(maxLen),
+			)
+			wantErr = codec.NewFailedToUnmarshalByteSlice(com.ErrTooLargeLength)
+			r       = cmock.NewReader().RegisterReadByte(
+				func() (b byte, err error) { return 0, nil },
+			).RegisterReadByte(
+				func() (b byte, err error) { return byte(longLen), nil },
+			)
+		)
+		_, n, err := c.Decode(r)
+		assertfatal.EqualError(t, err, wantErr)
+		assertfatal.Equal(t, n, 2)
+	})
 }
