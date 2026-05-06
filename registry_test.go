@@ -10,9 +10,9 @@ import (
 
 func TestRegistry(t *testing.T) {
 	r := NewRegistry(
-		WithCmd[struct{}, test.Cmd1](),
-		WithCmd[struct{}, test.Cmd2](),
-		WithResult[struct{}, test.Result1](),
+		WithCmd[any, test.Cmd1](),
+		WithCmd[any, test.Cmd2](),
+		WithResult[any, test.Result1](),
 	)
 	asserterror.Equal(t, reflect.TypeFor[test.Cmd1](), r.cmds[0])
 	asserterror.Equal(t, reflect.TypeFor[test.Cmd2](), r.cmds[1])

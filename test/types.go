@@ -37,13 +37,13 @@ func (s Struct3) Print() {
 
 type Cmd1 struct{ A, B int }
 
-func (c Cmd1) Exec(ctx context.Context, _ struct{}, proxy core.Proxy) error {
+func (c Cmd1) Exec(ctx context.Context, _ any, proxy core.Proxy) error {
 	return nil
 }
 
 type Cmd2 string
 
-func (c Cmd2) Exec(ctx context.Context, _ struct{}, proxy core.Proxy) error {
+func (c Cmd2) Exec(ctx context.Context, _ any, proxy core.Proxy) error {
 	return nil
 }
 
