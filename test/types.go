@@ -41,7 +41,7 @@ func (c Cmd1) Exec(ctx context.Context, _ struct{}, proxy core.Proxy) error {
 	return nil
 }
 
-type Cmd2 struct{ C string }
+type Cmd2 string
 
 func (c Cmd2) Exec(ctx context.Context, _ struct{}, proxy core.Proxy) error {
 	return nil
@@ -50,3 +50,11 @@ func (c Cmd2) Exec(ctx context.Context, _ struct{}, proxy core.Proxy) error {
 type Result1 int
 
 func (r Result1) LastOne() bool { return true }
+
+type Result2 struct {
+	Y string
+}
+
+func (r Result2) LastOne() bool {
+	return true
+}
