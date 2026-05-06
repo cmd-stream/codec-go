@@ -41,7 +41,7 @@ func (c Cmd1) Exec(ctx context.Context, _ struct{}, proxy core.Proxy) error {
 	return nil
 }
 
-type Cmd2 struct{ A, B int }
+type Cmd2 struct{ C string }
 
 func (c Cmd2) Exec(ctx context.Context, _ struct{}, proxy core.Proxy) error {
 	return nil
